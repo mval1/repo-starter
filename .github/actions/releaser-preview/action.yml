@@ -1,0 +1,94 @@
+name: "Releaser Preview"
+description: >-
+  Preview package changes prior to publish, using the releaser tool.
+
+inputs:
+  token:
+    description: >-
+      GITHUB_TOKEN used to comment on pull requests.
+    default: ${{ github.token }}
+  releaser-command:
+    description: >-
+      Custom releaser command if you need to use a shell script or alternative command instead.
+    default: "yarn releaser"
+  preview-comment-title:
+    description: Title of pull request preview comment.
+    default: "Package Release Preview"
+  no-changes-message:
+    description: Message to comment if there are no changes detected.
+    default: >-
+      This pull request does not introduce any package version changes.
+      If this is incorrect, please ensure that you are using conventional commit prefixes,
+      or have provided a version file.
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare Temp Folder
+      shell: bash
+      id: context
+      run: |
+        tmpdir="${{ runner.temp }}/github-action-preview"
+        echo "tmpdir=${tmpdir}" >> "$GITHUB_OUTPUT"
+        mkdir -p "${tmpdir}"
+
+    - name: Run releaser in Dry Run Mode
+      shell: bash
+      id: run-releaser
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: |
+        echo "<!-- RELEASER:BELOW -->" > "${{ steps.context.outputs.tmpdir }}/CHANGELOG.md"
+        ${{ inputs.releaser-command }} \
+          --dry-run \
+          --log-level 0 \
+          --no-git-push \
+          --git-base-branch origin/${{ github.base_ref }} \
+          --changelog-filename "${{ steps.context.outputs.tmpdir }}/CHANGELOG.md" \
+          --changeset-filename "${{ steps.context.outputs.tmpdir }}/changes.json" \
+          --force-write-change-files
+
+    - name: Write Preview File
+      shell: bash
+      env:
+        PREVIEW_FILE: ${{ format('{0}/changelog_preview.md', steps.context.outputs.tmpdir) }}
+        COMMENT_TITLE: ${{ inputs.preview-comment-title }}
+        NO_CHANGES_MESSAGE: ${{ inputs.no-changes-message }}
+      run: |
+        {
+          echo "<!-- RELEASER_CHANGELOG_PREVIEW -->";
+          echo "# ${COMMENT_TITLE}";
+          echo;
+        } >> "${PREVIEW_FILE}"
+
+        if jq -e '. == {}' "${{ steps.context.outputs.tmpdir }}/changes.json" >/dev/null; then
+          {
+            echo "${NO_CHANGES_MESSAGE}";
+          } >> "${PREVIEW_FILE}"
+        else
+          {
+            echo "This Pull Request introduces the following changes:";
+            echo;
+            cat "${{ steps.context.outputs.tmpdir }}/CHANGELOG.md";
+          } >> "${PREVIEW_FILE}"
+        fi
+
+    - name: Check for Changelog Comment
+      uses: peter-evans/find-comment@v3
+      id: found-comment
+      with:
+        token: ${{ inputs.token }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body-includes: <!-- RELEASER_CHANGELOG_PREVIEW -->
+
+    - name: Post Changelog to PR
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        token: ${{ inputs.token }}
+        comment-id: ${{ steps.found-comment.outputs.comment-id }}
+        issue-number: ${{ github.event.pull_request.number }}
+        edit-mode: replace
+        body-path: ${{ steps.context.outputs.tmpdir }}/changelog_preview.md
+branding:
+  icon: git-pull-request
+  color: gray-dark
