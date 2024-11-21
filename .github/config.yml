@@ -3,52 +3,51 @@
 # https://github.com/behaviorbot/new-issue-welcome
 #
 
-# Comment to be posted to on first time issues
+# Комментарий, который отправляется при создании первой задачи новым пользователем
 newIssueWelcomeComment: |
-  👋 Thanks for opening your first issue here! If you're reporting a 🐞 bug, please make sure you've completed all the fields in the issue template so we can best help.
+  👋 Спасибо за то, что создали вашу первую задачу здесь! Если вы сообщаете о 🐞 баге, убедитесь, что вы заполнили все поля в шаблоне задачи, чтобы мы могли вам лучше помочь.
 
-  We get a lot of issues on this repo, so please be patient and we will get back to you as soon as we can.
+  Мы получаем множество задач в этом репозитории, поэтому, пожалуйста, будьте терпеливы, и мы вернемся к вам, как только сможем.
 
 #
 # new-pr-welcome
 # https://github.com/behaviorbot/new-pr-welcome
 #
 
-# Comment to be posted to on PRs from first time contributors in your repository
+# Комментарий, который отправляется при создании первого PR новым участником
 newPRWelcomeComment: |
-  💖 Thanks for opening this pull request! 💖
+  💖 Спасибо за ваш первый запрос на слияние! 💖
 
-  Here is a list of things that will help get it across the finish line:
-  - Run `yarn lint` locally to catch formatting errors. This will fix some errors automatically, commit and push any changes.
-  - Run `yarn test` locally to catch errors.  This ensures all components still behave as they should.
-  - Run `yarn start` to run the doc site locally and try a few pages, ensuring everything is in good working order.
-  - Include tests when adding/changing behavior.
+  Вот список того, что поможет довести его до завершения:
+  - Запустите `yarn lint` локально, чтобы проверить ошибки форматирования. Это автоматически исправит некоторые ошибки, выполните коммит и отправьте изменения.
+  - Запустите `yarn test` локально, чтобы проверить ошибки. Это гарантирует, что все компоненты ведут себя как ожидается.
+  - Запустите `yarn start`, чтобы локально запустить сайт документации и проверить несколько страниц, убедившись, что все работает корректно.
+  - Добавьте тесты при изменении/добавлении функциональности.
 
-  We get a lot of pull requests on this repo, so please be patient and we will get back to you as soon as we can.
+  Мы получаем множество запросов на слияние в этом репозитории, поэтому, пожалуйста, будьте терпеливы, и мы вернемся к вам, как только сможем.
 
 #
 # first-pr-merge
 # https://github.com/behaviorbot/first-pr-merge
 #
 
-# Comment to be posted to on pull requests merged by a first time user
+# Комментарий, который отправляется при успешном слиянии первого PR пользователя
 firstPRMergeComment: |
-  Congrats on merging your first pull request! 🎉🎉🎉
+  Поздравляем с успешным слиянием вашего первого PR! 🎉🎉🎉
 
-  ![robot victory dance](https://media.giphy.com/media/tczJoRU7XwBS8/giphy.gif)
+  ![танцующий робот](https://media.giphy.com/media/tczJoRU7XwBS8/giphy.gif)
 
 #
 # lock-threads
 # https://github.com/dessant/lock-threads
 #
 
-# Number of days of inactivity before a closed issue or pull request is locked
+# Количество дней бездействия перед автоматической блокировкой закрытой задачи или PR
 daysUntilLock: 365
 
-# Comment to post before locking. Set to `false` to disable
+# Комментарий, который добавляется перед блокировкой. Установите `false`, чтобы отключить
 lockComment: >
-  This thread has been automatically locked because it has not had recent
-  activity. Please open a new issue for related bugs and link to relevant
-  comments in this thread.
-# Limit to only `issues` or `pulls`
+  Эта ветка была автоматически заблокирована, так как не было активности в течение продолжительного времени. Пожалуйста, создайте новую задачу для связанных ошибок и добавьте ссылки на соответствующие комментарии в этой ветке.
+
+# Ограничение только для `issues` или `pulls` (по умолчанию оба)
 # only: issues
