@@ -19,7 +19,7 @@ body:
     attributes:
       label: Что случилось?
       description: Укажаите подробное описание проблемы.
-      placeholder: Tell us what you see!
+      placeholder: Ошибка...
       value: "A bug happened!"
     validations:
       required: true
@@ -28,7 +28,7 @@ body:
     attributes:
       label: Как инициировать ошибку?
       description: Подробно опишите шаги чтобы инициировать ошибку.
-      placeholder: Tell us what you see!
+      placeholder: Во время работы...
       value: "A bug happened!"
     validations:
       required: false
